@@ -1,0 +1,64 @@
+# Задаём имя проекта
+name: htmx-books-prod
+
+services:
+  web:
+    # Указываем директорию ./app, в которой содержится Dockerfile для сборки образа
+    build: .
+    # Запускаем встроенный сервер Django
+    command: gunicorn django_htmx.wsgi:application --bind 0.0.0.0:8000
+    # Примонтируем том static-data к директории /home/app/web/static контейнера web
+    volumes:
+      - static-data:/usr/src/app/django_htmx/static
+    # Файл содержащий переменные окружения для контейнера
+    environment:
+      - DJANGO_ALLOWED_HOSTS=127.0.0.1
+      - CSRF_TRUSTED_ORIGINS=http://127.0.0.1
+      - CACHES_BACKEND=django.core.cache.backends.memcached.PyMemcacheCache
+      - CACHES_LOCATION=memcached:11211
+      - INTERNAL_IPS=127.0.0.1
+      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_DATABASE=book_django
+      - SQL_USER=book_django
+      - SQL_PASSWORD=pass_book_django
+      - SQL_HOST=db
+      - SQL_PORT=5432
+    # Пробрасываем 8000 порт контейнера на 8000 порт локалхоста(127.0.0.1:8000)
+#    ports:
+#      - 8000:8000
+    depends_on:
+      - db
+      - memcached
+
+  db:
+    # Берём образ БД PostgreSQL версии 15
+    image: postgres:16
+    # Примонтируем том postgres-data к директории /var/lib/postgresql/data контейнера db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    # Используем значения переменных окружения из .env файла
+    environment:
+      - POSTGRES_USER=book_django
+      - POSTGRES_PASSWORD=pass_book_django
+      - POSTGRES_DB=book_django
+
+  memcached:
+    # Берём образ Мemcached версии 1.6.21
+    image: memcached:1.6.21
+
+  nginx:
+    # Указываем директорию ./nginx, в которой содержится Dockerfile для сборки образа
+    build: ./nginx
+    volumes:
+      - static-data:/usr/src/app/django_htmx/static
+    # Пробрасываем 80 порт контейнера на 80 порт локальной машины(порт будет доступен из вне)
+    ports:
+      - 80:80
+    # Дожидаемся запуска контейнера web
+    depends_on:
+      - web
+
+volumes:
+  # Объявляем том postgres-data для хранения данных PostgreSQL
+  postgres-data:
+  static-data:
