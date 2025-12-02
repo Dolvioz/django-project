@@ -11,11 +11,8 @@ mkdir -p certbot/www
 echo "Настройка прав доступа..."
 chmod -R 755 certbot
 
-echo "Сборка Docker образов..."
-docker-compose -f docker-compose.prod.yml build
-
-echo "Запуск контейнеров..."
-docker-compose -f docker-compose.prod.yml up -d
+echo "Сборка Docker образов и запуск контейнеров..."
+docker compose -f docker-compose.prod.yml up -d --build
 
 echo "Ожидание запуска PostgreSQL..."
 sleep 15
