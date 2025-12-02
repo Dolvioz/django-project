@@ -6,7 +6,7 @@ echo "Начало установки Django проекта..."
 
 echo "Создание директорий..."
 mkdir -p certbot/conf
-mkdir certbot/www
+mkdir -p certbot/www
 
 echo "Настройка прав доступа..."
 chmod -R 755 certbot
