@@ -18,7 +18,7 @@ echo "Ожидание запуска PostgreSQL..."
 sleep 15
 
 echo "Применение миграций..."
-docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 
 echo "Сборка статических файлов..."
-docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --noinput
+docker compose -f docker-compose.prod.yml exec web python manage.py collectstatic --noinput
