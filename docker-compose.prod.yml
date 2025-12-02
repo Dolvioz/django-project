@@ -67,7 +67,7 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certonly --non-interactive --webroot --webroot-path=/var/www/certbot/ --email dolvioz@email --agree-tos --no-eff-email -d dolvioz.ru
+    command: certonly --non-interactive --webroot --webroot-path=/var/www/certbot/ --email dolvioz@mail.ru --agree-tos --no-eff-email -d dolvioz.ru
     depends_on:
       - nginx
 
