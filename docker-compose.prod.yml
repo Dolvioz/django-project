@@ -51,8 +51,8 @@ services:
     build: ./nginx
     volumes:
       - static-data:/usr/src/app/django_htmx/static
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - /home/certbot/conf:/etc/letsencrypt
+      - /home/certbot/www:/var/www/certbot
     # Пробрасываем 80 порт контейнера на 80 порт локальной машины(порт будет доступен из вне)
     ports:
       - 80:80
@@ -65,9 +65,9 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --non-interactive --webroot --webroot-path=/var/www/certbot/ --email dolvioz@mail.ru --agree-tos --no-eff-email -d dolvioz.ru
+      - /home/certbot/conf:/etc/letsencrypt
+      - /home/certbot/www:/var/www/certbot
+    command: certonly --non-interactive --webroot --webroot-path=/var/www/certbot/ --email dolvioz@mail.ru --agree-tos --no-eff-email -d dolvioz.ru -d www.dolvioz.ru
     depends_on:
       - nginx
 

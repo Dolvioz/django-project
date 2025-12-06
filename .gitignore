@@ -3,4 +3,5 @@ venv/
 /venv/
 .idea/
 __pycache__/
+/__pycache__/
 django_htmx/db.sqlite3
